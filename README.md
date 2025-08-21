@@ -82,10 +82,10 @@ There are three main steps:
 
 Since the process before training is time-consuming, I have provided the non-collated .npy files (use [step 3 in `stroke_classification/prepare_train.py`](#prepare_train) to collate these .npy files) in these folders:
 - (For `seq_len` set to `30`)
-    - [dataset_npy](https://drive.google.com/file/d/1Gcif3aLm6IIA3ZYQp3x-erQ71D2XG06e/view?usp=sharing)
-    - [dataset_npy_3d](https://drive.google.com/file/d/104BBFzTAQIJCj-pbA47OhJoNVMFGZlkP/view?usp=sharing)
+    - [dataset_npy](https://drive.google.com/file/d/1396RVvMxdUzMztiKA7leUvBJM95EF9LP/view?usp=sharing)
+    - [dataset_3d_npy](https://drive.google.com/file/d/1hIR1lFprfme1KWpB_uXPKUqd11TmBVxM/view?usp=sharing)
 - (For `seq_len` set to `100`)
-    - [dataset_npy_between_2_hits_with_max_limits](https://drive.google.com/file/d/1joZBj4r4GNR5GFVsoWZKTfT9iUNkh_vt/view?usp=sharing)
+    - [dataset_npy_between_2_hits_with_max_limits](https://drive.google.com/file/d/1kMBQsJojb7IGkAb08s2of5pZ5qtpSzNU/view?usp=sharing)
 
 ### Generating Stroke Clips
 (In `ShuttleSet` folder)
