@@ -6,18 +6,19 @@ import numpy as np
 from pathlib import Path
 
 
-def get_video_df():
-    df = pd.read_csv('set/match.csv')[['id', 'video', 'downcourt']]
+def get_video_df(set_info_dir: Path):
+    df = pd.read_csv(set_info_dir/'match.csv')[['id', 'video', 'downcourt']]
     df['downcourt'] = df['downcourt'].astype(bool)
     return df.set_index('id')
 
 
 def collect_shot_types_pos(
+    set_info_dir: Path,
     v_info: pd.DataFrame,
     player: str,
     type_ls: list
 ):
-    folder_path: Path = Path('set')/v_info['video']
+    folder_path: Path = set_info_dir/v_info['video']
     first_A_is_top = v_info['downcourt']
 
     set_count = len(list(folder_path.glob('*.csv')))
@@ -74,9 +75,7 @@ def collect_shot_types_pos(
     return pd.concat(sets_collected_ls).reset_index(drop=True)
 
 
-def set_between_2_hits_from_pos(shots_df: pd.DataFrame):
-    folder_path: Path = Path('set')/v_info['video']
-
+def set_between_2_hits_from_pos(folder_path: Path, shots_df: pd.DataFrame):
     new_df_ls = []
 
     groups = shots_df.groupby('set').groups
@@ -108,6 +107,7 @@ def set_between_2_hits_from_pos(shots_df: pd.DataFrame):
 
 
 def gen_shot_videos_from_1_src(
+    raw_video_dir: Path,
     out_root_dir: Path,
     v_info: pd.Series,
     shots_df: pd.DataFrame,
@@ -137,7 +137,7 @@ def gen_shot_videos_from_1_src(
         if not sub_folder.is_dir():
             sub_folder.mkdir()
 
-    video_path = str(next(Path('raw_video').glob(f"{v_info.name} *")))
+    video_path = str(next(raw_video_dir.glob(f"{v_info.name} *")))
 
     # MoviePy 版本
     video = mpe.VideoFileClip(video_path)
@@ -146,12 +146,13 @@ def gen_shot_videos_from_1_src(
     match strategy:
         case 'middle_in_a_sec':
             for row in shots_df.itertuples(index=False):
-                clip: mpe.VideoClip = video.subclip(
-                    frameNum_2_time(int(row.frame_num) - t, fps=video.fps),
-                    frameNum_2_time(int(row.frame_num) + t, fps=video.fps)
-                )
-                output_path = str(out_folder/f"{player}_{row.type}/{v_info.name}_{row.set}_{row.rally}_{int(row.ball_round)}.mp4")
-                clip.write_videofile(output_path)
+                output_path = out_folder/f"{player}_{row.type}/{v_info.name}_{row.set}_{row.rally}_{int(row.ball_round)}.mp4"
+                if not output_path.exists():
+                    clip: mpe.VideoClip = video.subclip(
+                        frameNum_2_time(int(row.frame_num) - t, fps=video.fps),
+                        frameNum_2_time(int(row.frame_num) + t, fps=video.fps)
+                    )
+                    clip.write_videofile(str(output_path))
 
         case 'between_2_hits':
             eps = t // 2  # extension
@@ -159,12 +160,13 @@ def gen_shot_videos_from_1_src(
                 start_f = int(row.start_f) if row.start_f != -1 else (int(row.frame_num) - t)
                 end_f = int(row.end_f) + eps if row.end_f != -1 else (int(row.frame_num) + t)
 
-                clip: mpe.VideoClip = video.subclip(
-                    frameNum_2_time(start_f, fps=video.fps),
-                    frameNum_2_time(end_f, fps=video.fps)
-                )
-                output_path = str(out_folder/f"{player}_{row.type}/{v_info.name}_{row.set}_{row.rally}_{int(row.ball_round)}.mp4")
-                clip.write_videofile(output_path)
+                output_path = out_folder/f"{player}_{row.type}/{v_info.name}_{row.set}_{row.rally}_{int(row.ball_round)}.mp4"
+                if not output_path.exists():
+                    clip: mpe.VideoClip = video.subclip(
+                        frameNum_2_time(start_f, fps=video.fps),
+                        frameNum_2_time(end_f, fps=video.fps)
+                    )
+                    clip.write_videofile(str(output_path))
 
         case 'between_2_hits_with_max_limits':
             limit = video.fps * 3 // 2  # num frames in 1.5 sec
@@ -180,12 +182,13 @@ def gen_shot_videos_from_1_src(
                 if end_f > frame_num + limit + eps:
                     end_f = frame_num + limit + eps
 
-                clip: mpe.VideoClip = video.subclip(
-                    frameNum_2_time(start_f, fps=video.fps),
-                    frameNum_2_time(end_f, fps=video.fps)
-                )
-                output_path = str(out_folder/f"{player}_{row.type}/{v_info.name}_{row.set}_{row.rally}_{int(row.ball_round)}.mp4")
-                clip.write_videofile(output_path)
+                output_path = out_folder/f"{player}_{row.type}/{v_info.name}_{row.set}_{row.rally}_{int(row.ball_round)}.mp4"
+                if not output_path.exists():
+                    clip: mpe.VideoClip = video.subclip(
+                        frameNum_2_time(start_f, fps=video.fps),
+                        frameNum_2_time(end_f, fps=video.fps)
+                    )
+                    clip.write_videofile(str(output_path))
 
         case _:
             raise NotImplementedError
@@ -202,23 +205,26 @@ def gen_shot_videos_from_1_src(
     # num_frames = t * 2 + 1
 
     # for i, row in shots_df.iterrows():
-    #     output_path = str(out_folder/f"{player}_{row['type']}/{v_info.name}_{row['set']}_{row['rally']}_{int(row['ball_round'])}.mp4")
-    #     start_t = (int(row['frame_num']) - t) / fps
-    #     write_video(output_path, cap, start_t=start_t, num_frames=num_frames)
+    #     output_path = out_folder/f"{player}_{row['type']}/{v_info.name}_{row['set']}_{row['rally']}_{int(row['ball_round'])}.mp4"
+    #     if not output_path.exists():
+    #         start_t = (int(row['frame_num']) - t) / fps
+    #         write_video(str(output_path), cap, start_t=start_t, num_frames=num_frames)
     # cap.release()
     
 
 if __name__ == "__main__":
+    raw_video_dir = Path('raw_video')
+    set_info_dir = Path('set')
     out_root_dir = Path('shuttle_set_between_2_hits_with_max_limits')
 
-    v_df = get_video_df()
+    v_df = get_video_df(set_info_dir)
     # print(v_df)
     vids_train = list(range(1, 9)) + [11] + list(range(13, 27)) + list(range(28, 35))
     vids_val = list(range(35, 39)) + [41]
     vids_test = [39, 40, 42, 43, 44]
 
-    player = 'Bottom'  # Top / Bottom
-    set_name = 'test'  # train / val / test
+    player = 'Top'  # Top / Bottom
+    set_name = 'train'  # train / val / test
 
     type_ls = [
         '放小球', '擋小球', '殺球', '點扣', '挑球', '防守回挑',
@@ -237,13 +243,17 @@ if __name__ == "__main__":
     for vid in vids_selected:
         v_info = v_df.loc[vid]
         # print(v_info)
-        shots_df = collect_shot_types_pos(v_info, player, type_ls)
+        shots_df = collect_shot_types_pos(set_info_dir, v_info, player, type_ls)
         
         if len(shots_df) != 0:
-            shots_df = set_between_2_hits_from_pos(shots_df)
+            shots_df = set_between_2_hits_from_pos(
+                folder_path=set_info_dir/v_info['video'],
+                shots_df=shots_df
+            )
             # with pd.option_context('display.max_rows', None):
             #     print(shots_df)
             gen_shot_videos_from_1_src(
+                raw_video_dir=raw_video_dir,
                 out_root_dir=out_root_dir,
                 v_info=v_info,
                 shots_df=shots_df,

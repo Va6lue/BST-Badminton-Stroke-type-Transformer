@@ -1,0 +1,25 @@
+# Python 3.11.X
+# PyTorch 2.3.1 with CUDA 12.1
+
+python -m pip install --upgrade pip
+
+pip install torch==2.3.1 torchvision==0.18.1 torchaudio==2.3.1 --index-url https://download.pytorch.org/whl/cu121
+
+pip install opencv-python
+pip install tqdm
+pip install pandas
+pip install matplotlib
+pip install scipy
+pip install parse
+
+pip install --upgrade wheel
+
+pip install mmpose
+pip install mmdet
+
+pip install openmim
+
+# Use mim install
+mim install mmcv
+
+# Changed "mmdet/init.py" line9 "2.2.0" to "2.2.1" to forcely make it compatible.

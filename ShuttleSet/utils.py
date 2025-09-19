@@ -1,7 +1,4 @@
 import cv2
-import matplotlib.pyplot as plt
-from sklearn.metrics import RocCurveDisplay
-
 from typing import Union
 
 
@@ -87,22 +84,5 @@ def write_video(output_path: str, cap: cv2.VideoCapture, start_t, num_frames: in
     video_writer.release()
 
 
-def show_ROC_curve(y_true, y_pred, md_serial_no):
-    display = RocCurveDisplay.from_predictions(
-        y_true,
-        y_pred,
-        color="darkorange",
-        name=f'md{md_serial_no}',
-        plot_chance_level=True,
-    )
-    display.ax_.set(
-        xlabel="FPR",
-        ylabel="TRR",
-        title="ROC curve",
-    )
-    plt.show()
-
-
 if __name__ == '__main__':
-    t = time_2_frameNum('00:11:33', fps=30)
-    print(t)
+    pass
