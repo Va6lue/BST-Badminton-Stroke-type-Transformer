@@ -11,26 +11,26 @@ Badminton, known for having the fastest ball speeds among all sports, presents s
 ## Results
 ### Results on ShuttleSet (25 classes)
 <img src="results_and_images/shuttleset_25_fixed_width.png" alt="Model comparison with fixed-width strategy" width="100%">
-<img src="results_and_images/shuttleset_25_our_strategy.png" alt="Model comparison with our strategy" width="71%">
-<img src="results_and_images/shuttleset_25_fixed_width_partial_train.png" alt="Model comparison on 25% trainset with fixed-width strategy" width="67%">
+<img src="results_and_images/shuttleset_25_our_strategy.png" alt="Model comparison with our strategy" width="77%">
+<img src="results_and_images/shuttleset_25_fixed_width_partial_train.png" alt="Model comparison on 25% trainset with fixed-width strategy" width="70%">
 
 ### Results on BadmintonDB (18 classes)
-<img src="results_and_images/badmintonDB.png" alt="Model comparison with predefined strategy" width="80%">
+<img src="results_and_images/badmintonDB.png" alt="Model comparison with predefined strategy" width="85%">
 
 ### Results on TenniSet (6 classes)
-<img src="results_and_images/tenniSet.png" alt="Model comparison with predefined strategy" width="90%">
+<img src="results_and_images/tenniSet.png" alt="Model comparison with predefined strategy" width="95%">
 
 ## Training Speed
 - On a NVIDIA RTX 4090 setup, **BST-CG-AP** trains slightly faster than **TemPose-TF**:
 
-    <img src="results_and_images/training_speed.png" alt="Training Speed" width="50%">
+    <img src="results_and_images/training_speed.png" alt="Training Speed" width="53%">
 
 - The following figure also shows that training **BST-CG-AP** converges faster than **TemPose-TF**:
 
-    <img src="results_and_images/loss_curves.png" alt="Loss Curves" width="70%">
+    <img src="results_and_images/loss_curves.png" alt="Loss Curves" width="85%">
 
 > [!NOTE]
-> TemPose-TF*, the official implementation from TemPose's authors, uses the same TCN object to handle player positions and shuttlecock, so it causes the performance gap compared to TemPose-TF.
+> **TemPose-TF\***, the official implementation from TemPose's authors, uses the same TCN object to handle player positions and shuttlecock, so it causes the performance gap compared to **TemPose-TF**.
 
 ## Inference
 > [!WARNING]
@@ -150,29 +150,30 @@ Thus, we have collated .npy files now.
 
 ### Training Classification Models
 (In `stroke_classification` folder)
-- Run each `<architecture_name>_main.py` for training, validating, testing each model, and please check hyper-parameters:
-    - `hyp.n_classes`: should be the same as in your dataset.
-    - `hyp.seq_len`: should be the same as in your dataset.
-    - `hyp.pose_style`
-        - `J_only`: modality `J` in this paper.
-        - `JnB_bone`: modality `J+B` in this paper.
-    - `use_3d_pose`: `False` for 2D, `True` for 3D.
-    - `train_partial`: `1` for the whole training set.
-    - `model_name`
-        - `BST_0`: **BST-0** in this paper.
-        - `BST_CG`: **BST-CG** in this paper.
-        - `BST_AP`: **BST-AP** in this paper.
-        - `BST_CG_AP`: **BST-CG-AP** in this paper.
-    - `additional_model_info`: to distinguish your model weights.
-    - `serial_no`: to distinguish your model weights when trying different initial weights.
+
+Run each `<architecture_name>_main.py` for training, validating, testing each model, and please check hyper-parameters:
 ```
 python main_on_<dataset_name>/<architecture_name>_main.py
 ```
+- `hyp.n_classes`: should be the same as in your dataset.
+- `hyp.seq_len`: should be the same as in your dataset.
+- `hyp.pose_style`
+    - `J_only`: modality `J` in this paper.
+    - `JnB_bone`: modality `J+B` in this paper.
+- `use_3d_pose`: `False` for 2D, `True` for 3D.
+- `train_partial`: `1` for the whole training set.
+- `model_name`
+    - `BST_0`: **BST-0** in this paper.
+    - `BST_CG`: **BST-CG** in this paper.
+    - `BST_AP`: **BST-AP** in this paper.
+    - `BST_CG_AP`: **BST-CG-AP** in this paper.
+- `additional_model_info`: to distinguish your model weights.
+- `serial_no`: to distinguish your model weights when trying different initial weights.
 
 > [!NOTE]
-> BST-CG is identical to BST-1 from the arXiv preprint v2.  
-> BST-AP is identical to BST-2 from the arXiv preprint v2.  
-> BST-CG-AP is identical to BST-3 from the arXiv preprint v2.
+> **BST-CG** is identical to **BST-1** from the arXiv preprint v2.  
+> **BST-AP** is identical to **BST-2** from the arXiv preprint v2.  
+> **BST-CG-AP** is identical to **BST-3** from the arXiv preprint v2.
 
 ## Citation
 ```
