@@ -33,7 +33,8 @@ Badminton, known for having the fastest ball speeds among all sports, presents s
 > **TemPose-TF\***, the official implementation from TemPose's authors, uses the same TCN object to handle player positions and shuttlecock, so it causes the performance gap compared to **TemPose-TF**.
 
 ## Inference
-> [!WARNING]
+I've provided an example of inferring code in `stroke_classification/main_on_shuttleset/bst_infer.py`.
+> [!CAUTION]
 > Make sure your input data is normalized in the same way as in `stroke_classification/preparing_data/prepare_train_on_<dataset_name>.py`.
 > - `normalize_shuttlecock`
 >   - Normalized by the video resolution.
@@ -88,7 +89,7 @@ Since the process before training is time-consuming, I have provided the non-col
     - `type_ls`: each element should be the same class name as in ShuttleSet.
     - `strategy`: please check if it matches the `out_root_dir` or not.
 4. Remove all the clips labeled "removed" in `flaw_shot_records.csv`.
-> [!CAUTION]
+> [!IMPORTANT]
 > Before the next step, please make a copy of `Top_小平球`, `Bottom_小平球` and `未知球種` folders to another place, if you want to generate ShuttleSet (25 classes) later.
 5. Move all clips in `Top_小平球` or `Bottom_小平球` to `未知球種`, which means "none" type, and delete these empty folders.
 6. Make sure the total number of the clips each type is the same as that shown in `class_total.xlsx`.
@@ -109,10 +110,9 @@ Go check the total number of the clips each merged type in `class_total.xlsx`.
 #### TenniSet (6 classes)
 (In `TenniSet` folder)
 1. Download the videos from their repository [TenniSet](https://github.com/HaydenFaulkner/Tennis) and put them into `videos` folder.
+2. Run `gen_my_dataset.py`.
 > [!NOTE]
 > Since they provide video files directly, the downloaded video resolutions must be the same. We don't need `my_raw_video_resolution.csv` here.
-
-2. Run `gen_my_dataset.py`.
 
 ### Data Preprocessing
 1. (Only TenniSet needs) Make sure your [TennisCourtDetector](https://github.com/yastrebksv/TennisCourtDetector) works well.
