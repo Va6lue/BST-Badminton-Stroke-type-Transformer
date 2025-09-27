@@ -54,6 +54,8 @@ I've provided an example of inferring code in `stroke_classification/main_on_shu
 - [Weights trained on ShuttleSet](https://drive.google.com/drive/folders/1D4172WZDJWPvpJdpaHDhy_cA-s8F-zR5?usp=sharing)
 - [Weights trained on BadmintonDB](https://drive.google.com/drive/folders/1RJgh6q_6M4OgpYU6VNuMaJ9YR8U8Y-li?usp=sharing)
 - [Weights trained on TenniSet](https://drive.google.com/drive/folders/1VZQNrN3XDm8czzFNRxVjGA2dtSojMxDA?usp=sharing)
+> [!TIP]
+> How to choose a great weight file? Please see `results_and_images/result_table.xlsx`.
 
 ## Reproducing the Results
 There are three main steps:
