@@ -8,6 +8,7 @@ import torch
 from torch import nn, Tensor
 from positional_encodings.torch_encodings import PositionalEncoding1D
 from torchinfo import summary
+from torch.utils.flop_counter import FlopCounterMode
 
 
 class MLP(nn.Module):
@@ -667,7 +668,7 @@ class TemPose_TF(nn.Module):
 
 
 if __name__ == '__main__':
-    b, t, n = 3, 30, 2
+    b, t, n = 1, 100, 2
     n_features = (17 + 19 * 1) * n
     pose = torch.randn((b, t, n, n_features), dtype=torch.float)
     pos = torch.randn((b, t, n, 2), dtype=torch.float)
@@ -677,14 +678,30 @@ if __name__ == '__main__':
     model = TemPose_TF(
         in_dim=n_features,
         seq_len=t,
-        n_class=35,
+        n_class=25,
         d_model=100
     )
-    # input_data = [pose, videos_len]
-    # model = TemPose_V(
-    #     in_dim=n_features,
-    #     seq_len=30,
-    #     n_class=35,
-    #     d_model=100
-    # )
-    summary(model, input_data=input_data, depth=4, device='cpu')
+    # summary(model, input_data=input_data, depth=4, device='cpu')
+
+    # Count FLOPs
+    flop_counter = FlopCounterMode(display=False)
+    with flop_counter:
+        output = model(*input_data)
+    flops_per_forward = flop_counter.get_total_flops()
+    print(f"FLOPs (per forward pass): {flops_per_forward / 1e9:.2f} GFLOPS")
+    
+    n_epochs_about = 350
+    # on ShuttleSet
+    n_training_samples = 25741
+    n_validate_samples = 4241
+    n_testing_samples = 3499
+
+    training_flops = flops_per_forward * n_training_samples * n_epochs_about * 3
+    validate_flops = flops_per_forward * n_validate_samples * n_epochs_about
+    testing_flops = flops_per_forward * n_testing_samples
+    print(f"Training FLOPs: {training_flops / 1e15:.2f} PFLOPs")
+    print(f"Validating FLOPs: {validate_flops / 1e15:.2f} PFLOPs")
+    print(f"Testing FLOPs (per 1000 instances): {flops_per_forward * 1000 / 1e12:.2f} TFLOPs")
+    print(f"Testing FLOPs: {testing_flops / 1e12:.2f} TFLOPs")
+    total_flops = training_flops + validate_flops + testing_flops
+    print(f"Total FLOPs: {total_flops / 1e15:.2f} PFLOPs")
