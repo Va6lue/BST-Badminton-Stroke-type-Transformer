@@ -3,34 +3,8 @@
 
 [![Static Badge](https://img.shields.io/badge/Python-3.11-gray?labelColor=%234584B6)](https://www.python.org/downloads/) [![Static Badge](https://img.shields.io/badge/PyTorch-2.4.0%2Bcu121-gray?labelColor=%23EE4C2C)](https://pytorch.org/) [![Static Badge](https://img.shields.io/badge/NumPy-1.26.4-gray?labelColor=%234776CC)](https://numpy.org/news/#releases)
 
-## Abstract
-Badminton, known for having the fastest ball speeds among all sports, presents significant challenges to the field of computer vision, including player identification, court line detection, shuttlecock trajectory tracking, and player stroke-type classification. In this paper, we introduce a novel video clipping strategy to extract frames of each player's racket swing in a badminton broadcast match. These clipped frames are then processed by three existing models: one for Human Pose Estimation to obtain human skeletal joints, another for shuttlecock trajectory tracking, and the other for court line detection to determine player positions on the court. Leveraging these data as inputs, we propose Badminton Stroke-type Transformer (BST) to classify player stroke-types in singles. To the best of our knowledge, experimental results demonstrate that our method outperforms the previous state-of-the-art on the largest publicly available badminton video dataset (ShuttleSet), another badminton dataset (BadmintonDB), and a tennis dataset (TenniSet). These results suggest that effectively leveraging ball trajectory is a promising direction for action recognition in racket sports.
-
-**Keywords:** Deep learning, Transformer, Skeleton-based Action Recognition, Stroke classification, Badminton, Racket sports
-
-## Results
-### Results on ShuttleSet (25 classes)
-<img src="results_and_images/shuttleset_25_fixed_width.png" alt="Model comparison with fixed-width strategy" width="100%">
-<img src="results_and_images/shuttleset_25_our_strategy.png" alt="Model comparison with our strategy" width="77%">
-<img src="results_and_images/shuttleset_25_fixed_width_partial_train.png" alt="Model comparison on 25% trainset with fixed-width strategy" width="70%">
-
-### Results on BadmintonDB (18 classes)
-<img src="results_and_images/badmintonDB.png" alt="Model comparison with predefined strategy" width="85%">
-
-### Results on TenniSet (6 classes)
-<img src="results_and_images/tenniSet.png" alt="Model comparison with predefined strategy" width="95%">
-
-## Training Speed
-- On a NVIDIA RTX 4090 setup, **BST-CG-AP** trains slightly faster than **TemPose-TF**:
-
-    <img src="results_and_images/training_speed.png" alt="Training Speed" width="53%">
-
-- The following figure also shows that training **BST-CG-AP** converges faster than **TemPose-TF**:
-
-    <img src="results_and_images/loss_curves.png" alt="Loss Curves" width="85%">
-
-> [!NOTE]
-> **TemPose-TF\***, the official implementation from TemPose's authors, uses the same TCN object to handle player positions and shuttlecock, so it causes the performance gap compared to **TemPose-TF**.
+## Poster
+<img src="results_and_images/CVsports-4_poster.png" alt="Poster" width="100%">
 
 ## Inference
 I've provided an example of inferring code in `stroke_classification/main_on_shuttleset/bst_infer.py`.
