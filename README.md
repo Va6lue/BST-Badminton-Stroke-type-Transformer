@@ -153,14 +153,13 @@ python main_on_<dataset_name>/<architecture_name>_main.py
 
 ## Citation
 ```
-@misc{chang2025bstbadmintonstroketypetransformer,
-      title={BST: Badminton Stroke-type Transformer for Skeleton-based Action Recognition in Racket Sports}, 
-      author={Jing-Yuan Chang},
-      year={2025},
-      eprint={2502.21085},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2502.21085}, 
+@InProceedings{Chang_2026_CVPR,
+    author    = {Chang, Jing-Yuan},
+    title     = {BST: Badminton Stroke-type Transformer for Skeleton-based Action Recognition in Racket Sports},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops},
+    month     = {June},
+    year      = {2026},
+    pages     = {9889-9898}
 }
 ```
 
